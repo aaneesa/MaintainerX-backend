@@ -7,19 +7,30 @@ from django.utils import timezone
 import json
 
 
-class GitHubUser(models.Model):
-    """GitHub authenticated user model"""
-    username = models.CharField(max_length=100, unique=True)
-    github_id = models.IntegerField(unique=True)
-    email = models.EmailField(blank=True, null=True)
+class GoogleUser(models.Model):
+    """Google authenticated user model"""
+    email = models.EmailField(unique=True)
+    google_id = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=200)
     avatar_url = models.URLField(blank=True, null=True)
-    access_token = models.TextField()  # Encrypted in production
+    github_url = models.URLField(blank=True, null=True)  # User-provided GitHub profile URL
+    github_username = models.CharField(max_length=100, blank=True, null=True)  # Extracted from URL
+    access_token = models.TextField()  # Google access token
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"GitHubUser: {self.username}"
+        return f"GoogleUser: {self.email}"
+
+    def save(self, *args, **kwargs):
+        # Extract GitHub username from URL if provided
+        if self.github_url and not self.github_username:
+            import re
+            match = re.search(r'github\.com/([^/]+)', self.github_url)
+            if match:
+                self.github_username = match.group(1)
+        super().save(*args, **kwargs)
 
 
 class Repository(models.Model):
@@ -44,10 +55,11 @@ class Repository(models.Model):
 class ContributorProfile(models.Model):
     """Enhanced contributor profile with AI-powered trust scoring"""
     username = models.CharField(max_length=100, unique=True)
-    github_id = models.IntegerField(unique=True)
+    github_id = models.IntegerField(unique=True, null=True, blank=True)  # May not have GitHub ID initially
     platform = models.CharField(max_length=20, default='github')
     profile_url = models.URLField()
     avatar_url = models.URLField(blank=True, null=True)
+    google_user = models.OneToOneField('GoogleUser', on_delete=models.CASCADE, null=True, blank=True)
     
     # Activity metrics
     activity_score = models.FloatField(default=0.0)

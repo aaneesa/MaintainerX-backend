@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-+9r30da(m0$az8zxf7jdt72*_+@_^yayk2qion!*a@0t@+tdwn'
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-+9r30da(m0$az8zxf7jdt72*_+@_^yayk2qion!*a@0t@+tdwn')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
 
 
 # Application definition
@@ -152,13 +153,13 @@ CORS_ALLOWED_ORIGINS = [
 
 CORS_ALLOW_CREDENTIALS = True
 
-# GitHub OAuth settings
-GITHUB_CLIENT_ID = ''  # Will be set later
-GITHUB_CLIENT_SECRET = ''  # Will be set later
-GITHUB_REDIRECT_URI = 'http://localhost:8000/api/auth/github/callback/'
+# Google OAuth settings
+GOOGLE_CLIENT_ID = config('GOOGLE_CLIENT_ID', default='')
+GOOGLE_CLIENT_SECRET = config('GOOGLE_CLIENT_SECRET', default='')
+GOOGLE_REDIRECT_URI = config('GOOGLE_REDIRECT_URI', default='http://localhost:8002/api/auth/google/callback/')
 
 # Gemini AI settings
-GEMINI_API_KEY = ''  # Will be set later
+GEMINI_API_KEY = config('GEMINI_API_KEY', default='')
 
 # Logging
 LOGGING = {

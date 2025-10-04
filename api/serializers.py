@@ -1,22 +1,23 @@
 """
-Serializers for GitHub-integrated Cookie-Licking Detection system
+Serializers for Google-integrated Cookie-Licking Detection system
 """
 from rest_framework import serializers
 from .models import (
-    GitHubUser, ContributorProfile, Repository, Issue, Comment,
+    GoogleUser, ContributorProfile, Repository, Issue, Comment,
     ActivityLog, InactiveContributorDetection, ReminderMessage, AIAnalysisLog
 )
 
 
-class GitHubUserSerializer(serializers.ModelSerializer):
-    """Serializer for GitHub authenticated users"""
+class GoogleUserSerializer(serializers.ModelSerializer):
+    """Serializer for Google authenticated users"""
     
     class Meta:
-        model = GitHubUser
+        model = GoogleUser
         fields = [
-            'id', 'username', 'github_id', 'email', 'avatar_url',
-            'is_active', 'created_at', 'updated_at'
+            'id', 'email', 'google_id', 'name', 'avatar_url',  
+            'github_url', 'github_username', 'is_active', 'created_at', 'updated_at'
         ]
+        # Exclude sensitive access_token
 
 
 class ContributorProfileSerializer(serializers.ModelSerializer):

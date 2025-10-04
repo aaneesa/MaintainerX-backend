@@ -3,17 +3,17 @@ Django admin configuration for Cookie-Licking Detection models
 """
 from django.contrib import admin
 from .models import (
-    GitHubUser, ContributorProfile, Repository, Issue, Comment,
+    GoogleUser, ContributorProfile, Repository, Issue, Comment,
     ActivityLog, InactiveContributorDetection, ReminderMessage, AIAnalysisLog
 )
 
 
-@admin.register(GitHubUser)
-class GitHubUserAdmin(admin.ModelAdmin):
-    list_display = ['username', 'github_id', 'email', 'is_active', 'created_at']
+@admin.register(GoogleUser)
+class GoogleUserAdmin(admin.ModelAdmin):
+    list_display = ['name', 'google_id', 'email', 'github_url', 'is_active', 'created_at']
     list_filter = ['is_active', 'created_at']
-    search_fields = ['username', 'email']
-    readonly_fields = ['github_id', 'created_at', 'updated_at']
+    search_fields = ['name', 'email', 'github_url']
+    readonly_fields = ['google_id', 'created_at', 'updated_at']
 
 
 @admin.register(ContributorProfile)
