@@ -206,7 +206,7 @@ def google_callback(request):
         from urllib.parse import urlencode
         import json
         
-        frontend_url = "http://localhost:5174"  # Update this to match your frontend URL
+        frontend_url = "http://localhost:5173"  # Updated to match Vite dev server port
         redirect_params = {
             'auth_success': 'true',
             'user_data': json.dumps(user_data)
